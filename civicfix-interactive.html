@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CivicFix India - National Municipal Grievance & Tracking Portal</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --background: #f8fafc;
+      --card: #ffffff;
+      --foreground: #0f172a;
+      --muted-foreground: #64748b;
+      --border: #e2e8f0;
+      --primary: #0d9488;
+      --primary-foreground: #ffffff;
+    }
+    body {
+      background-color: var(--background);
+      color: var(--foreground);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar { display: none; }
+    .custom-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-orange-100 selection:text-orange-900">
+
+  <!-- ================= TOP MUNICIPAL HEADER ================= -->
+  <header class="sticky top-0 z-40 bg-[var(--card)]/95 backdrop-blur-md border-b border-[var(--border)] shadow-xs">
+    <!-- Top Tricolor Accent Bar -->
+    <div class="h-1 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600"></div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Brand -->
+      <button onclick="switchView('feed')" class="flex items-center space-x-3 text-left focus:outline-none group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-orange-500/20 group-hover:scale-105 transition">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-extrabold text-xl tracking-tight text-[var(--foreground)]">CivicFix</span>
+            <span class="text-[12px] font-extrabold px-2 py-0.5 rounded-md bg-orange-50 text-orange-700 border border-orange-200">
+              INDIA
+            </span>
+          </div>
+          <p class="text-[12px] text-[var(--muted-foreground)] hidden sm:block">National Municipal Grievance & Tracking Portal</p>
+        </div>
+      </button>
+
+      <!-- Nav Actions -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <button id="nav-feed-btn" onclick="switchView('feed')" class="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-slate-100 text-[var(--foreground)]">
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          <span>Issues Feed</span>
+        </button>
+
+        <button id="nav-report-btn" onclick="switchView('report')" class="flex items-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 active:scale-95 transition shadow-sm shadow-orange-600/30">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>Report an Issue</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- ================= VIEW 1: ISSUE FEED ================= -->
+    <div id="view-feed" class="space-y-8">
+      
+      <!-- Hero Banner -->
+      <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 text-white p-6 sm:p-10 shadow-xl border border-slate-700/60">
+        <div class="relative z-10 max-w-2xl space-y-3 sm:space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/30 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-orange-400 animate-ping"></span>
+            Smart Municipal Transparency Initiative
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
+            Spot a civic hazard in your city? <br class="hidden sm:inline" />
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-emerald-400">
+              Report it with detailed address & tracking.
+            </span>
+          </h1>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl">
+            Hazardous potholes, non-functioning streetlights, overflowing garbage, or open manholes — report with landmark, ward, PIN code, and GPS. Directly routed to municipal authorities (MCD, BBMP, BMC, GHMC).
+          </p>
+          <div class="pt-2 flex flex-wrap items-center gap-3">
+            <button onclick="switchView('report')" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-orange-500/25 active:scale-95 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+              </svg>
+              <span>Submit Civic Report</span>
+            </button>
+            <div class="flex items-center gap-4 text-xs text-slate-300 font-medium pl-2">
+              <span id="hero-stat-open" class="flex items-center gap-1.5"><strong class="text-rose-400">0</strong> Open</span>
+              <span id="hero-stat-progress" class="flex items-center gap-1.5"><strong class="text-amber-400">0</strong> In Progress</span>
+              <span id="hero-stat-resolved" class="flex items-center gap-1.5"><strong class="text-emerald-400">0</strong> Resolved</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="absolute -right-8 -bottom-8 opacity-5 text-white pointer-events-none">
+          <svg class="w-72 h-72 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Category Filter Pills -->
+      <div class="space-y-2">
+        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Filter by Civic Category</span>
+        <div id="category-pills" class="flex items-center gap-2 overflow-x-auto pb-1 custom-scroll">
+          <!-- Rendered dynamically by JS -->
+        </div>
+      </div>
+
+      <!-- Search, Filter & Sort Controls -->
+      <div class="bg-[var(--card)] p-4 rounded-2xl border border-[var(--border)] shadow-xs space-y-3">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <!-- Search box -->
+          <div class="relative flex-1">
+            <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted-foreground)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input
+              id="search-input"
+              type="text"
+              oninput="handleSearch(this.value)"
+              placeholder="Search by Landmark, Ward, PIN Code, Locality, or Ticket ID (e.g. Indiranagar, 560038, Pillar 148)..."
+              class="w-full pl-10 pr-9 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition text-[var(--foreground)]"
+            />
+            <button id="search-clear-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              &times;
+            </button>
+          </div>
+
+          <!-- Sort Dropdown -->
+          <div class="min-w-[160px]">
+            <select
+              id="sort-select"
+              onchange="handleSortChange(this.value)"
+              class="w-full px-3 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] text-[var(--foreground)] font-medium focus:outline-none focus:border-orange-500 cursor-pointer"
+            >
+              <option value="newest">Newest first</option>
+              <option value="upvotes">Most upvoted</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Status Filter Tabs -->
+        <div class="flex items-center gap-1.5 pt-2 border-t border-[var(--border)] text-xs overflow-x-auto custom-scroll">
+          <span class="text-[var(--muted-foreground)] font-semibold mr-1">Status:</span>
+          <button onclick="setStatusFilter('all')" id="status-tab-all" class="px-2.5 py-1 rounded-lg font-bold bg-slate-900 text-white transition">All Issues</button>
+          <button onclick="setStatusFilter('open')" id="status-tab-open" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition">Open</button>
+          <button onclick="setStatusFilter('in_progress')" id="status-tab-in_progress" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition">In Progress</button>
+          <button onclick="setStatusFilter('resolved')" id="status-tab-resolved" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition">Resolved</button>
+        </div>
+      </div>
+
+      <!-- Feed Grid -->
+      <div id="issues-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered dynamically by JS -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden bg-[var(--card)] rounded-3xl border border-[var(--border)] p-12 text-center space-y-4 max-w-md mx-auto">
+        <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-[var(--foreground)] text-base">No reports found</h3>
+          <p class="text-xs text-[var(--muted-foreground)] mt-1">Try searching a different landmark or clearing your filters.</p>
+        </div>
+        <button onclick="resetAllFilters()" class="text-xs font-bold px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl transition">
+          Reset All Filters
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ================= VIEW 2: REPORT FORM WITH DETAILED INDIAN ADDRESS ================= -->
+    <div id="view-report" class="hidden max-w-3xl mx-auto space-y-6">
+      
+      <!-- Back Link -->
+      <div>
+        <button onclick="switchView('feed')" class="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 hover:text-orange-900 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          <span>Back to Issues Feed</span>
+        </button>
+      </div>
+
+      <div class="space-y-1">
+        <h2 class="text-2xl sm:text-3xl font-black text-[var(--foreground)] tracking-tight">
+          Report a Civic Grievance
+        </h2>
+        <p class="text-xs sm:text-sm text-[var(--muted-foreground)]">
+          Provide detailed landmark, ward number, and street address so the local municipal team can inspect and resolve the problem immediately.
+        </p>
+      </div>
+
+      <form id="report-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+        
+        <!-- Photo Upload Box -->
+        <div class="bg-[var(--card)] rounded-2xl p-5 border border-[var(--border)] shadow-xs space-y-3">
+          <label class="block text-xs font-bold text-[var(--foreground)] uppercase tracking-wider">
+            Issue Photo Proof <span class="text-orange-600 font-semibold">*Recommended</span>
+          </label>
+
+          <div id="photo-preview-container" class="hidden relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-slate-900">
+            <img id="photo-preview-img" src="" alt="Issue Preview" class="w-full h-full object-cover">
+            <button type="button" onclick="removePhoto()" class="absolute top-2 right-2 p-1.5 rounded-full bg-slate-900/80 text-white hover:bg-slate-900 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <label id="photo-dropzone" class="border-2 border-dashed border-[var(--border)] hover:border-orange-500 hover:bg-orange-50/20 rounded-xl p-6 flex flex-col items-center justify-center text-center cursor-pointer transition">
+            <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <p class="mt-2 text-xs font-bold text-slate-800">Click to upload photo or use camera</p>
+            <p class="text-[12px] text-slate-400 mt-0.5">JPG, PNG, WebP up to 8MB</p>
+            <input type="file" id="photo-input" accept="image/*" onchange="handlePhotoUpload(event)" class="hidden">
+          </label>
+        </div>
+
+        <!-- Issue Details -->
+        <div class="bg-[var(--card)] rounded-2xl p-5 border border-[var(--border)] shadow-xs space-y-4">
+          <h3 class="text-xs font-bold text-orange-700 uppercase tracking-wider">1. Issue Details</h3>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-slate-700 uppercase">Title <span class="text-rose-500">*</span></label>
+            <input
+              type="text"
+              id="report-title"
+              required
+              placeholder="e.g. Hazardous deep pothole causing skids and bumper damage near bus stop"
+              class="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)]"
+            >
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase">Category <span class="text-rose-500">*</span></label>
+              <select
+                id="report-category"
+                class="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)] cursor-pointer"
+              >
+                <option value="Potholes & Road Damage">Potholes & Road Damage</option>
+                <option value="Streetlights & High-Mast Lamps">Streetlights & High-Mast Lamps</option>
+                <option value="Overflowing Garbage & Dump Yards">Overflowing Garbage & Dump Yards</option>
+                <option value="Open Manholes & Drain Slabs">Open Manholes & Drain Slabs</option>
+                <option value="Water Pipeline Burst & Leakage">Water Pipeline Burst & Leakage</option>
+                <option value="Waterlogging & Blocked Drains">Waterlogging & Blocked Drains</option>
+                <option value="Stray Animal Hazards">Stray Animal Hazards</option>
+                <option value="Encroachment & Road Hazards">Encroachment & Road Hazards</option>
+              </select>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase">Routed Department</label>
+              <input
+                type="text"
+                id="report-dept"
+                readonly
+                value="Auto-Routed to Respective Municipal Department"
+                class="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-100 border border-[var(--border)] text-slate-500 font-medium"
+              >
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-slate-700 uppercase">Detailed Description</label>
+            <textarea
+              id="report-desc"
+              rows="3"
+              placeholder="Describe the severity, duration of issue, pole number, road dimensions, or any hazard to pedestrians..."
+              class="w-full px-3.5 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)]"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- ================= DETAILED INDIAN ADDRESS FORM ================= -->
+        <div class="bg-[var(--card)] rounded-2xl p-5 border border-[var(--border)] shadow-xs space-y-4">
+          <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <div>
+              <h3 class="text-xs font-bold text-orange-700 uppercase tracking-wider">2. Detailed Location & Address</h3>
+              <p class="text-[12px] text-slate-400">Detailed landmark & ward information ensures municipal workers locate the site without delay.</p>
+            </div>
+            <button
+              type="button"
+              onclick="autoDetectLocation()"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-700 text-xs font-bold transition border border-orange-200"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.071 7.071l-1.414-1.414M6.343 6.343L4.93 4.93m14.142 0l-1.414 1.414M6.343 17.657l-1.414 1.414M12 6a6 6 0 100 12 6 6 0 000-12z"/>
+              </svg>
+              <span>Auto-Detect GPS</span>
+            </button>
+          </div>
+
+          <!-- Row 1: House/Shop No & Street/Lane -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase">
+                House / Plot / Shop No.
+              </label>
+              <input
+                type="text"
+                id="addr-house"
+                placeholder="e.g. Shop No. 14 / Plot 48 / Near Electric Pole #24"
+                class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)]"
+              >
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase">
+                Street / Road / Cross / Lane <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="addr-street"
+                required
+                placeholder="e.g. 100 Feet Ring Road, 12th Main / Gali No. 4"
+                class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)]"
+              >
+            </div>
+          </div>
+
+          <!-- Row 2: Prominent Landmark -->
+          <div class="space-y-1">
+            <label class="block text-xs font-bold text-slate-700 uppercase">
+              Prominent Landmark <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative">
+              <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <input
+                type="text"
+                id="addr-landmark"
+                required
+                placeholder="e.g. Opposite Metro Pillar 148 / Behind Hanuman Temple / Near Mother Dairy"
+                class="w-full pl-10 pr-4 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)]"
+              >
+            </div>
+          </div>
+
+          <!-- Row 3: Locality & Ward/Zone -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase">
+                Locality / Colony / Sector <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="addr-locality"
+                required
+                placeholder="e.g. Indiranagar 2nd Stage / Rohini Sector 16 / Andheri West"
+                class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)]"
+              >
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase">
+                Ward No. & Municipal Zone <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="addr-ward"
+                required
+                placeholder="e.g. Ward 112 (Domlur Zone) / Ward 54 (Rohini Zone)"
+                class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)]"
+              >
+            </div>
+          </div>
+
+          <!-- Row 4: City/Corporation & PIN Code -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase">
+                Municipal Corporation & City <span class="text-rose-500">*</span>
+              </label>
+              <select
+                id="addr-city"
+                class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)] cursor-pointer"
+              >
+                <option value="Bengaluru (BBMP), Karnataka">Bengaluru (BBMP), Karnataka</option>
+                <option value="New Delhi (MCD), Delhi NCR">New Delhi (MCD), Delhi NCR</option>
+                <option value="Mumbai (BMC), Maharashtra">Mumbai (BMC), Maharashtra</option>
+                <option value="Hyderabad (GHMC), Telangana">Hyderabad (GHMC), Telangana</option>
+                <option value="Pune (PMC), Maharashtra">Pune (PMC), Maharashtra</option>
+                <option value="Chennai (GCC), Tamil Nadu">Chennai (GCC), Tamil Nadu</option>
+                <option value="Kolkata (KMC), West Bengal">Kolkata (KMC), West Bengal</option>
+                <option value="Ahmedabad (AMC), Gujarat">Ahmedabad (AMC), Gujarat</option>
+                <option value="Jaipur (JMC), Rajasthan">Jaipur (JMC), Rajasthan</option>
+                <option value="Lucknow (LNN), Uttar Pradesh">Lucknow (LNN), Uttar Pradesh</option>
+                <option value="Gurugram (MCG), Haryana">Gurugram (MCG), Haryana</option>
+                <option value="Other Indian City / Municipality">Other Indian City / Municipality</option>
+              </select>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 uppercase">
+                6-Digit PIN Code <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="addr-pincode"
+                required
+                maxlength="6"
+                pattern="[0-9]{6}"
+                placeholder="e.g. 560038 / 110089"
+                class="w-full px-3.5 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 border border-[var(--border)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-[var(--foreground)] font-mono"
+              >
+            </div>
+          </div>
+
+          <!-- Interactive Click-to-Pin Visual Map Grid -->
+          <div class="space-y-1.5 pt-2">
+            <span class="block text-xs font-bold text-slate-700">Precise GPS Coordinates (Click on map to drop pin):</span>
+            <div
+              id="interactive-map"
+              onclick="handleMapClick(event)"
+              class="relative h-44 w-full rounded-xl overflow-hidden border border-slate-300 bg-slate-100 cursor-crosshair select-none"
+              style="background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px), linear-gradient(to right, #e2e8f0 1px, transparent 1px), linear-gradient(to bottom, #e2e8f0 1px, transparent 1px); background-size: 24px 24px, 48px 48px, 48px 48px;"
+            >
+              <div class="absolute inset-x-0 top-1/2 h-3 bg-amber-200/50 -translate-y-1/2 pointer-events-none"></div>
+              <div class="absolute inset-y-0 left-1/3 w-3 bg-amber-200/50 pointer-events-none"></div>
+
+              <!-- Animated Map Pin Marker -->
+              <div id="map-pin" class="absolute transition-all duration-150 flex flex-col items-center pointer-events-none -translate-x-1/2 -translate-y-full" style="left: 48%; top: 52%;">
+                <div class="w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-orange-500/30">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                  </svg>
+                </div>
+                <div class="w-2.5 h-1 bg-black/40 rounded-full blur-[1px]"></div>
+              </div>
+
+              <!-- Map Overlay Badge -->
+              <div class="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs text-white px-2.5 py-1 rounded-lg text-[12px] font-mono flex items-center gap-1.5 pointer-events-none">
+                <span id="coord-display">Lat: 28.613900, Lng: 77.209000 (New Delhi)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 active:scale-[0.99] shadow-lg shadow-orange-600/30 transition flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span>Submit Grievance to Municipal Queue</span>
+        </button>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- ================= STATUS UPDATE MODAL (DEMO TRIAGE) ================= -->
+  <div id="status-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div class="bg-[var(--card)] w-full max-w-sm rounded-2xl p-6 border border-[var(--border)] shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <span id="modal-ticket" class="text-xs font-mono text-slate-400">CIV-IN-2026-101</span>
+          <h3 class="text-base font-bold text-[var(--foreground)]">Update Ticket Status</h3>
+        </div>
+        <button onclick="closeStatusModal()" class="text-slate-400 hover:text-slate-600 p-1">&times;</button>
+      </div>
+      <p id="modal-title" class="text-xs text-[var(--muted-foreground)] line-clamp-1 italic"></p>
+
+      <div class="space-y-2 pt-1">
+        <label onclick="selectModalStatus('open')" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
+          <div class="flex items-center gap-2.5">
+            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+            <span class="text-xs font-bold text-slate-800">Open (Awaiting Inspection)</span>
+          </div>
+          <input type="radio" name="modal_st" value="open" id="rad-open" class="text-orange-600">
+        </label>
+        <label onclick="selectModalStatus('in_progress')" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
+          <div class="flex items-center gap-2.5">
+            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+            <span class="text-xs font-bold text-slate-800">In Progress (Field Team Active)</span>
+          </div>
+          <input type="radio" name="modal_st" value="in_progress" id="rad-in_progress" class="text-orange-600">
+        </label>
+        <label onclick="selectModalStatus('resolved')" class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
+          <div class="flex items-center gap-2.5">
+            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            <span class="text-xs font-bold text-slate-800">Resolved (Repaired & Verified)</span>
+          </div>
+          <input type="radio" name="modal_st" value="resolved" id="rad-resolved" class="text-orange-600">
+        </label>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-[var(--border)]">
+        <button onclick="closeStatusModal()" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+        <button onclick="saveStatusModal()" class="px-4 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg">Save Status</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SUBMIT SUCCESS MODAL ================= -->
+  <div id="success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div class="bg-[var(--card)] w-full max-w-md rounded-3xl p-6 text-center space-y-4 border border-[var(--border)] shadow-2xl">
+      <div class="w-14 h-14 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto border border-orange-100 shadow-inner">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-xl font-black text-[var(--foreground)]">Grievance Registered Successfully!</h3>
+        <p class="text-xs text-[var(--muted-foreground)] mt-1">Your complaint has been automatically routed to the respective municipal division.</p>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-3 border border-slate-200 text-left space-y-1">
+        <div class="flex justify-between items-center">
+          <span class="text-[12px] font-bold text-slate-400 uppercase">Grievance Ticket ID</span>
+          <span id="success-ticket-id" class="font-mono text-sm font-extrabold text-orange-700 tracking-wider">CIV-IN-2026-105</span>
+        </div>
+        <p id="success-address-preview" class="text-xs text-slate-600 border-t border-slate-200/80 pt-1 mt-1 truncate"></p>
+      </div>
+      <button onclick="dismissSuccessModal()" class="w-full py-2.5 rounded-xl font-bold text-xs text-white bg-orange-600 hover:bg-orange-700 transition">
+        View on Feed
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    const INITIAL_ISSUES = [
+      {
+        id: 'in-1',
+        ticket_no: 'CIV-IN-2026-101',
+        title: 'Severe 9-inch deep pothole causing two-wheeler skids',
+        description: 'Large asphalt crater at blind curve. Deep puddle fills during rains, leading to multiple rider falls every day.',
+        category: 'Potholes & Road Damage',
+        department: 'PWD / Road Infrastructure Dept',
+        status: 'open',
+        address_details: {
+          house: 'Shop No. 14, Near Reliance Fresh',
+          street: '100 Feet Ring Road, 12th Main',
+          landmark: 'Opposite Metro Pillar 148',
+          locality: 'Indiranagar 2nd Stage',
+          ward: 'Ward 112 (Domlur Zone)',
+          city: 'Bengaluru (BBMP), Karnataka',
+          pincode: '560038'
+        },
+        latitude: 12.9716,
+        longitude: 77.6412,
+        photo_url: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80',
+        upvotes: 46,
+        created_at: new Date(Date.now() - 3 * 3600 * 1000).toISOString()
+      },
+      {
+        id: 'in-2',
+        ticket_no: 'CIV-IN-2026-102',
+        title: 'High-mast streetlight pole #18 non-functional for 4 days',
+        description: '3 out of 4 high-mast sodium lamps are out near the girls secondary school and bus shelter. Complete dark zone creates unsafe pedestrian passage.',
+        category: 'Streetlights & High-Mast Lamps',
+        department: 'Electrical / Streetlight Wing',
+        status: 'in_progress',
+        address_details: {
+          house: 'Near Bus Shelter #4',
+          street: 'Main Market Road',
+          landmark: 'Opposite Government Senior Secondary School',
+          locality: 'Sector 14 Market',
+          ward: 'Ward 28 (Old City Zone)',
+          city: 'Gurugram (MCG), Haryana',
+          pincode: '122001'
+        },
+        latitude: 28.4595,
+        longitude: 77.0266,
+        photo_url: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80',
+        upvotes: 63,
+        created_at: new Date(Date.now() - 18 * 3600 * 1000).toISOString()
+      },
+      {
+        id: 'in-3',
+        ticket_no: 'CIV-IN-2026-103',
+        title: 'Overflowing municipal garbage dump yard spilling onto main road',
+        description: 'Sanitation contractors have skipped collection for 3 consecutive days. Wet garbage and vegetable waste blocking left traffic lane.',
+        category: 'Overflowing Garbage & Dump Yards',
+        department: 'Solid Waste Management (SWM)',
+        status: 'open',
+        address_details: {
+          house: 'Municipal Dump Facility #3',
+          street: 'Station Link Road',
+          landmark: 'Beside Sabzi Mandi Gate No. 2',
+          locality: 'Andheri West Market',
+          ward: 'Ward K/W (Andheri West)',
+          city: 'Mumbai (BMC), Maharashtra',
+          pincode: '400058'
+        },
+        latitude: 19.1197,
+        longitude: 72.8464,
+        photo_url: 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=600&q=80',
+        upvotes: 31,
+        created_at: new Date(Date.now() - 8 * 3600 * 1000).toISOString()
+      },
+      {
+        id: 'in-4',
+        ticket_no: 'CIV-IN-2026-104',
+        title: 'Missing iron manhole cover poses critical danger to school children',
+        description: 'Cast iron stormwater manhole cover broken and sunken inside the 7-foot deep shaft. Urgent concrete replacement slab required.',
+        category: 'Open Manholes & Drain Slabs',
+        department: 'Delhi Jal Board / Drain Maintenance',
+        status: 'resolved',
+        address_details: {
+          house: 'Plot No. 48, Lane No. 3',
+          street: 'B-Block Main Road',
+          landmark: 'Behind Pracheen Hanuman Temple',
+          locality: 'Sector 16, Rohini',
+          ward: 'Ward 54 (Rohini Zone)',
+          city: 'New Delhi (MCD), Delhi NCR',
+          pincode: '110089'
+        },
+        latitude: 28.7383,
+        longitude: 77.1128,
+        photo_url: 'https://images.unsplash.com/photo-1584824486509-112e4181ff6b?auto=format&fit=crop&w=600&q=80',
+        upvotes: 94,
+        created_at: new Date(Date.now() - 72 * 3600 * 1000).toISOString()
+      },
+      {
+        id: 'in-5',
+        ticket_no: 'CIV-IN-2026-105',
+        title: 'Municipal drinking water main pipeline burst flooding the avenue',
+        description: 'Subterranean distribution pipe ruptured under morning supply pressure. Clean potable water flooding baseline shops and eroding pavement.',
+        category: 'Water Pipeline Burst & Leakage',
+        department: 'PHED Water Supply & Sewerage',
+        status: 'in_progress',
+        address_details: {
+          house: 'House No. C-18',
+          street: '80 Feet Road',
+          landmark: 'Opposite Bank of Baroda ATM',
+          locality: 'Mahesh Nagar, Gopalpura Bypass',
+          ward: 'Ward 33 (Sanganer Zone)',
+          city: 'Jaipur (JMC), Rajasthan',
+          pincode: '302015'
+        },
+        latitude: 26.8851,
+        longitude: 75.7820,
+        photo_url: 'https://images.unsplash.com/photo-1584824486509-112e4181ff6b?auto=format&fit=crop&w=600&q=80',
+        upvotes: 57,
+        created_at: new Date(Date.now() - 26 * 3600 * 1000).toISOString()
+      }
+    ];
+
+    const CATEGORIES = [
+      'All',
+      'Potholes & Road Damage',
+      'Streetlights & High-Mast Lamps',
+      'Overflowing Garbage & Dump Yards',
+      'Open Manholes & Drain Slabs',
+      'Water Pipeline Burst & Leakage',
+      'Waterlogging & Blocked Drains',
+      'Stray Animal Hazards',
+      'Encroachment & Road Hazards'
+    ];
+
+    let issues = [];
+    let selectedCategory = 'All';
+    let searchQuery = '';
+    let sortBy = 'newest';
+    let statusFilter = 'all';
+    let userUpvotes = new Set();
+    let currentPhotoBase64 = null;
+    let selectedLat = 28.6139;
+    let selectedLng = 77.2090;
+    let editingIssueId = null;
+
+    function loadState() {
+      try {
+        const stored = localStorage.getItem('civicfix_india_en_issues');
+        issues = stored ? JSON.parse(stored) : INITIAL_ISSUES;
+        const upvotesStored = localStorage.getItem('civicfix_india_en_upvotes');
+        if (upvotesStored) userUpvotes = new Set(JSON.parse(upvotesStored));
+      } catch (e) {
+        issues = INITIAL_ISSUES;
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('civicfix_india_en_issues', JSON.stringify(issues));
+        localStorage.setItem('civicfix_india_en_upvotes', JSON.stringify([...userUpvotes]));
+      } catch (e) {}
+    }
+
+    function switchView(viewName) {
+      const feedView = document.getElementById('view-feed');
+      const reportView = document.getElementById('view-report');
+      const feedBtn = document.getElementById('nav-feed-btn');
+      const reportBtn = document.getElementById('nav-report-btn');
+
+      if (viewName === 'feed') {
+        feedView.classList.remove('hidden');
+        reportView.classList.add('hidden');
+        feedBtn.className = "flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-slate-100 text-[var(--foreground)]";
+        render();
+      } else {
+        feedView.classList.add('hidden');
+        reportView.classList.remove('hidden');
+        feedBtn.className = "flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition text-[var(--muted-foreground)] hover:bg-slate-50";
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderCategoryPills() {
+      const container = document.getElementById('category-pills');
+      container.innerHTML = '';
+
+      CATEGORIES.forEach(cat => {
+        const count = cat === 'All' 
+          ? issues.length 
+          : issues.filter(i => i.category.toLowerCase() === cat.toLowerCase()).length;
+        
+        const isSelected = selectedCategory === cat;
+        const btn = document.createElement('button');
+        btn.onclick = () => { selectedCategory = cat; render(); };
+        btn.className = `flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+          isSelected 
+            ? 'bg-orange-600 text-white shadow-xs' 
+            : 'bg-white text-slate-700 border border-[var(--border)] hover:bg-slate-50'
+        }`;
+        btn.innerHTML = `
+          <span>${cat}</span>
+          <span class="px-1.5 py-0.2 rounded-full text-[12px] ${isSelected ? 'bg-orange-700 text-orange-100' : 'bg-slate-100 text-slate-600'}">
+            ${count}
+          </span>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function timeAgo(dateStr) {
+      const seconds = Math.floor((Date.now() - new Date(dateStr)) / 1000);
+      if (seconds < 60) return 'just now';
+      const m = Math.floor(seconds / 60);
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      const d = Math.floor(h / 24);
+      return `${d}d ago`;
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('issues-grid');
+      const empty = document.getElementById('empty-state');
+      grid.innerHTML = '';
+
+      const filtered = issues.filter(item => {
+        if (selectedCategory !== 'All' && item.category.toLowerCase() !== selectedCategory.toLowerCase()) return false;
+        if (statusFilter !== 'all' && item.status !== statusFilter) return false;
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase();
+          const addr = item.address_details || {};
+          const fullAddressString = `${addr.house || ''} ${addr.street || ''} ${addr.landmark || ''} ${addr.locality || ''} ${addr.ward || ''} ${addr.city || ''} ${addr.pincode || ''}`.toLowerCase();
+          return item.title.toLowerCase().includes(q) ||
+                 (item.description && item.description.toLowerCase().includes(q)) ||
+                 item.ticket_no.toLowerCase().includes(q) ||
+                 fullAddressString.includes(q);
+        }
+        return true;
+      });
+
+      filtered.sort((a, b) => {
+        if (sortBy === 'upvotes') return b.upvotes - a.upvotes;
+        if (sortBy === 'oldest') return new Date(a.created_at) - new Date(b.created_at);
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+
+      if (filtered.length === 0) {
+        grid.classList.add('hidden');
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      grid.classList.remove('hidden');
+      empty.classList.add('hidden');
+
+      filtered.forEach(item => {
+        const isUpvoted = userUpvotes.has(item.id);
+        const card = document.createElement('div');
+        card.className = "bg-[var(--card)] rounded-2xl border border-[var(--border)] hover:border-orange-300 shadow-xs hover:shadow-md transition flex flex-col overflow-hidden group";
+
+        let badgeBg = "bg-rose-50 text-rose-700 border-rose-200";
+        let dotBg = "bg-rose-500";
+        let statusLabel = "Open";
+        if (item.status === 'in_progress') {
+          badgeBg = "bg-amber-50 text-amber-700 border-amber-200";
+          dotBg = "bg-amber-500";
+          statusLabel = "In Progress";
+        } else if (item.status === 'resolved') {
+          badgeBg = "bg-emerald-50 text-emerald-700 border-emerald-200";
+          dotBg = "bg-emerald-500";
+          statusLabel = "Resolved";
+        }
+
+        const addr = item.address_details || {};
+        const mapUrl = `https://www.google.com/maps?q=${item.latitude},${item.longitude}`;
+
+        card.innerHTML = `
+          <div class="relative aspect-[16/10] bg-slate-100 overflow-hidden">
+            <img src="${item.photo_url || 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80'}" 
+                 alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[12px] font-bold tracking-wider uppercase bg-slate-900/85 text-white backdrop-blur-xs">
+              ${item.category}
+            </span>
+            <span class="absolute top-2.5 right-2.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-bold border ${badgeBg}">
+              <span class="w-1.5 h-1.5 rounded-full ${dotBg}"></span>
+              ${statusLabel}
+            </span>
+          </div>
+
+          <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-[12px] text-slate-400">
+                <span class="font-mono font-bold text-orange-800 bg-orange-50 px-1.5 py-0.5 rounded border border-orange-200">${item.ticket_no}</span>
+                <span>${timeAgo(item.created_at)}</span>
+              </div>
+              <h4 class="font-bold text-sm text-[var(--foreground)] line-clamp-2 leading-snug group-hover:text-orange-700 transition">
+                ${item.title}
+              </h4>
+              <p class="text-xs text-[var(--muted-foreground)] line-clamp-2 leading-relaxed">
+                ${item.description || 'No detailed remarks added.'}
+              </p>
+            </div>
+
+            <!-- Detailed Indian Municipal Address Box -->
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[12px] space-y-1 text-slate-600">
+              <div class="font-bold text-slate-800 flex items-center justify-between">
+                <span class="flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 text-orange-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <span>${addr.landmark || 'Landmark specified'}</span>
+                </span>
+                <a href="${mapUrl}" target="_blank" class="text-orange-600 hover:underline flex items-center gap-0.5">
+                  <span>GPS Map</span> &nearr;
+                </a>
+              </div>
+              <p class="text-slate-500 truncate">
+                ${addr.house ? addr.house + ', ' : ''}${addr.street || ''}, ${addr.locality || ''}
+              </p>
+              <div class="flex items-center justify-between text-[11px] text-slate-400 pt-0.5 border-t border-slate-200/60">
+                <span class="font-semibold text-slate-700">${addr.ward || 'Ward -'}</span>
+                <span class="font-mono">${addr.city ? addr.city.split(',')[0] : ''} - ${addr.pincode || ''}</span>
+              </div>
+            </div>
+
+            <!-- Card Bottom Bar: Upvote & Status Changer -->
+            <div class="pt-2 border-t border-[var(--border)] flex items-center justify-between">
+              <button onclick="toggleUpvote('${item.id}')" 
+                      class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 ${
+                        isUpvoted ? 'bg-orange-600 text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-700 hover:border-orange-500 hover:text-orange-700'
+                      }">
+                <svg class="w-3.5 h-3.5 ${isUpvoted ? 'fill-current' : ''}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                </svg>
+                <span>${item.upvotes}</span>
+                <span class="font-normal opacity-80">Upvotes</span>
+              </button>
+
+              <button onclick="openStatusModal('${item.id}')" class="text-[12px] font-semibold text-slate-400 hover:text-slate-800 hover:bg-slate-100 px-2 py-1 rounded-lg transition">
+                Triage Status &rarr;
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderStats() {
+      const openCount = issues.filter(i => i.status === 'open').length;
+      const progCount = issues.filter(i => i.status === 'in_progress').length;
+      const resCount = issues.filter(i => i.status === 'resolved').length;
+      document.getElementById('hero-stat-open').innerHTML = `<strong class="text-rose-400">${openCount}</strong> Open`;
+      document.getElementById('hero-stat-progress').innerHTML = `<strong class="text-amber-400">${progCount}</strong> In Progress`;
+      document.getElementById('hero-stat-resolved').innerHTML = `<strong class="text-emerald-400">${resCount}</strong> Resolved`;
+    }
+
+    function render() {
+      renderCategoryPills();
+      renderStats();
+      renderGrid();
+    }
+
+    function toggleUpvote(id) {
+      const item = issues.find(i => i.id === id);
+      if (!item) return;
+      if (userUpvotes.has(id)) {
+        userUpvotes.delete(id);
+        item.upvotes = Math.max(0, item.upvotes - 1);
+      } else {
+        userUpvotes.add(id);
+        item.upvotes += 1;
+      }
+      saveState();
+      render();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val;
+      const clearBtn = document.getElementById('search-clear-btn');
+      if (val) clearBtn.classList.remove('hidden');
+      else clearBtn.classList.add('hidden');
+      renderGrid();
+    }
+
+    function clearSearch() {
+      searchQuery = '';
+      document.getElementById('search-input').value = '';
+      document.getElementById('search-clear-btn').classList.add('hidden');
+      renderGrid();
+    }
+
+    function handleSortChange(val) {
+      sortBy = val;
+      renderGrid();
+    }
+
+    function setStatusFilter(st) {
+      statusFilter = st;
+      ['all', 'open', 'in_progress', 'resolved'].forEach(k => {
+        const btn = document.getElementById(`status-tab-${k}`);
+        if (k === st) {
+          btn.className = "px-2.5 py-1 rounded-lg font-bold bg-slate-900 text-white transition";
+        } else {
+          btn.className = "px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition";
+        }
+      });
+      renderGrid();
+    }
+
+    function resetAllFilters() {
+      selectedCategory = 'All';
+      searchQuery = '';
+      document.getElementById('search-input').value = '';
+      document.getElementById('search-clear-btn').classList.add('hidden');
+      statusFilter = 'all';
+      setStatusFilter('all');
+      render();
+    }
+
+    function handleMapClick(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const pctX = (x / rect.width) * 100;
+      const pctY = (y / rect.height) * 100;
+
+      const pin = document.getElementById('map-pin');
+      pin.style.left = `${pctX}%`;
+      pin.style.top = `${pctY}%`;
+
+      selectedLat = Number((28.5000 + (1 - pctY / 100) * 0.25).toFixed(6));
+      selectedLng = Number((77.1000 + (pctX / 100) * 0.25).toFixed(6));
+      document.getElementById('coord-display').textContent = `Lat: ${selectedLat}, Lng: ${selectedLng} (GPS Fixed)`;
+    }
+
+    function autoDetectLocation() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser. Please click directly on the map.");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(pos => {
+        selectedLat = Number(pos.coords.latitude.toFixed(6));
+        selectedLng = Number(pos.coords.longitude.toFixed(6));
+        document.getElementById('coord-display').textContent = `Lat: ${selectedLat}, Lng: ${selectedLng} (GPS Auto-Detected)`;
+      }, err => {
+        alert("Could not detect location. Please click on the map to place pin.");
+      });
+    }
+
+    function handlePhotoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        currentPhotoBase64 = ev.target.result;
+        document.getElementById('photo-preview-img').src = currentPhotoBase64;
+        document.getElementById('photo-preview-container').classList.remove('hidden');
+        document.getElementById('photo-dropzone').classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removePhoto() {
+      currentPhotoBase64 = null;
+      document.getElementById('photo-input').value = '';
+      document.getElementById('photo-preview-container').classList.add('hidden');
+      document.getElementById('photo-dropzone').classList.remove('hidden');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('report-title').value.trim();
+      const category = document.getElementById('report-category').value;
+      const desc = document.getElementById('report-desc').value.trim();
+
+      const house = document.getElementById('addr-house').value.trim();
+      const street = document.getElementById('addr-street').value.trim();
+      const landmark = document.getElementById('addr-landmark').value.trim();
+      const locality = document.getElementById('addr-locality').value.trim();
+      const ward = document.getElementById('addr-ward').value.trim();
+      const city = document.getElementById('addr-city').value;
+      const pincode = document.getElementById('addr-pincode').value.trim();
+
+      if (!title || !street || !landmark || !locality || !ward || !pincode) {
+        alert("Please fill in all mandatory address fields.");
+        return;
+      }
+
+      const newId = String(Date.now());
+      const nextTicketNum = 100 + issues.length + 1;
+      const ticketNo = `CIV-IN-2026-${nextTicketNum}`;
+
+      const fallbackPhotos = {
+        'Potholes & Road Damage': 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80',
+        'Streetlights & High-Mast Lamps': 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80',
+        'Overflowing Garbage & Dump Yards': 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=600&q=80',
+        'Open Manholes & Drain Slabs': 'https://images.unsplash.com/photo-1584824486509-112e4181ff6b?auto=format&fit=crop&w=600&q=80',
+        'Water Pipeline Burst & Leakage': 'https://images.unsplash.com/photo-1584824486509-112e4181ff6b?auto=format&fit=crop&w=600&q=80',
+        'Waterlogging & Blocked Drains': 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80',
+        'Stray Animal Hazards': 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80',
+        'Encroachment & Road Hazards': 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80'
+      };
+
+      const newIssue = {
+        id: newId,
+        ticket_no: ticketNo,
+        title,
+        category,
+        description: desc,
+        address_details: {
+          house,
+          street,
+          landmark,
+          locality,
+          ward,
+          city,
+          pincode
+        },
+        latitude: selectedLat,
+        longitude: selectedLng,
+        photo_url: currentPhotoBase64 || fallbackPhotos[category] || fallbackPhotos['Encroachment & Road Hazards'],
+        status: 'open',
+        upvotes: 1,
+        created_at: new Date().toISOString()
+      };
+
+      userUpvotes.add(newId);
+      issues.unshift(newIssue);
+      saveState();
+
+      document.getElementById('report-form').reset();
+      removePhoto();
+
+      document.getElementById('success-ticket-id').textContent = ticketNo;
+      document.getElementById('success-address-preview').textContent = `${landmark}, ${street}, ${locality}, ${ward}, ${city.split(',')[0]} - ${pincode}`;
+      document.getElementById('success-modal').classList.remove('hidden');
+    }
+
+    function dismissSuccessModal() {
+      document.getElementById('success-modal').classList.add('hidden');
+      switchView('feed');
+    }
+
+    function openStatusModal(id) {
+      editingIssueId = id;
+      const item = issues.find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById('modal-ticket').textContent = item.ticket_no;
+      document.getElementById('modal-title').textContent = `"${item.title}"`;
+      document.getElementById(`rad-${item.status}`).checked = true;
+      document.getElementById('status-modal').classList.remove('hidden');
+    }
+
+    function closeStatusModal() {
+      document.getElementById('status-modal').classList.add('hidden');
+      editingIssueId = null;
+    }
+
+    function selectModalStatus(st) {
+      document.getElementById(`rad-${st}`).checked = true;
+    }
+
+    function saveStatusModal() {
+      if (!editingIssueId) return;
+      const checked = document.querySelector('input[name="modal_st"]:checked');
+      if (checked) {
+        const item = issues.find(i => i.id === editingIssueId);
+        if (item) item.status = checked.value;
+        saveState();
+        render();
+      }
+      closeStatusModal();
+    }
+
+    loadState();
+    render();
+  </script>
+</body>
+</html>
